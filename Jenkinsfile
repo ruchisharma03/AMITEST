@@ -1,5 +1,3 @@
-
-   
 //  store 'region': 'latest ami is present or not'
 def serviceAmiIdChanged = [: ]
 String cron_string = "0 0 */20 * *" // cron every 20th of the month
@@ -18,38 +16,38 @@ pipeline {
     stage('check the ami version') {
       agent any
       steps {
-          script {
+        script {
 
-            def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
+          def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
 
-            for (String jobStatus: result.split(',')) {
+          for (String jobStatus: result.split(',')) {
 
-              String[] eachjobStatus = jobStatus.split(':');
+            String[] eachjobStatus = jobStatus.split(':');
 
-              if (eachjobStatus.size() > 1) {
+            if (eachjobStatus.size() > 1) {
 
-                serviceAmiIdChanged[eachjobStatus[0]] = eachjobStatus[1];
-              }
-
+              serviceAmiIdChanged[eachjobStatus[0]] = eachjobStatus[1];
             }
+
           }
-          echo "${serviceAmiIdChanged}"
         }
+        echo "${serviceAmiIdChanged}"
       }
+    }
   }
 
-  }
+}
 
-  post {
-    always {
-      echo "====++++always++++===="
-    }
-    success {
-      echo "====++++only when successful++++===="
-    }
-    failure {
-      echo "====++++only when failed++++===="
-    }
+post {
+  always {
+    echo "====++++always++++===="
   }
+  success {
+    echo "====++++only when successful++++===="
+  }
+  failure {
+    echo "====++++only when failed++++===="
+  }
+}
 
 }
