@@ -20,8 +20,8 @@ pipeline {
         script {
 
           def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
+          println(result)
         }
-        echo "${result}"
       }        
     }
   }
