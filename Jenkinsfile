@@ -16,6 +16,7 @@ pipeline {
     stage('check the ami version') {
       agent any
       steps {
+        sh pip3 install boto3
         script {
 
           def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
