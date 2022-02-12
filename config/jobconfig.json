@@ -1,0 +1,25 @@
+{
+  "service_name": "test",
+  "test": [
+    {
+      "job_name": "first",
+      "parameters": [
+        {
+          "name": "message",
+          "value": "1",
+          "$class": "StringParameterValue"
+        }
+      ]
+    },
+    {
+      "job_name": "second",
+      "parameters": [
+        {
+          "name": "message",
+          "value": "2",
+          "$class": "StringParameterValue"
+        }
+      ]
+    }
+  ]
+}

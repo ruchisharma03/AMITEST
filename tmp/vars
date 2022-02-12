@@ -1,0 +1,12 @@
+AWS_SERVICE_CONFIG_FILE='' # location of aws service config file 
+JOBCONFIG_FILE_PATH='' # location of job config file path
+
+types of vars:
+=============
+https://javadoc.jenkins.io/hudson/model/ParameterValue.html
+ 
+ BooleanParameterValue,
+ FileParameterValue, 
+ PasswordParameterValue, 
+ RunParameterValue, 
+ StringParameterValue

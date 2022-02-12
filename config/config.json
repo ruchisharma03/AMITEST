@@ -1,0 +1,16 @@
+{
+  "regions": ["us-east-1","ap-south-1"],
+  "services": ["ec2","autoscaling"],
+  "us-east-1": {
+    "images": {
+      "filters": [
+        {
+          "Name": "name",
+          "Values": ["postgres-sql-ami"]
+        }
+      ]
+    },
+    "service_name": "test"
+  }
+}
+
