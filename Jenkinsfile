@@ -20,20 +20,9 @@ pipeline {
         script {
 
           def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
-
-          for (String jobStatus: result.split(',')) {
-
-            String[] eachjobStatus = jobStatus.split(':');
-
-            if (eachjobStatus.size() > 1) {
-
-              serviceAmiIdChanged[eachjobStatus[0]] = eachjobStatus[1];
-            }
-
-          }
         }
-        echo "${serviceAmiIdChanged}"
-      }
+        echo "${result}"
+      }        
     }
   }
 
