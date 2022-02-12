@@ -44,6 +44,7 @@ def check_ami_versions():
         if latest_ami_id and launch_config_ami_id:
             # if ami id matches
             if compare_ami_versions(latest_ami_id, launch_config_ami_id):
+                print(latest_ami_id,launch_config_ami_id)
                 matched = True  
                 not_matched = False 
             else:
