@@ -1,22 +1,12 @@
 {
-  "service_name": "test",
-  "test": [
+  "service_name": "cert-kodak",
+  "cert-kodak": [
     {
-      "job_name": "first",
+      "job_name": "kodak-user-test",
       "parameters": [
         {
-          "name": "message",
-          "value": "1",
-          "$class": "StringParameterValue"
-        }
-      ]
-    },
-    {
-      "job_name": "second",
-      "parameters": [
-        {
-          "name": "message",
-          "value": "2",
+          "name": "Label",
+          "value": "rsharma001",
           "$class": "StringParameterValue"
         }
       ]
