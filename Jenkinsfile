@@ -77,5 +77,3 @@ pipeline {
       echo "====++++only when failed++++===="
     }
   }
-
-}
