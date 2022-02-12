@@ -1,16 +1,20 @@
 {
-  "regions": ["us-east-1","ap-south-1"],
+  "regions": ["eu-west-1"],
   "services": ["ec2","autoscaling"],
-  "us-east-1": {
+  "eu-west-1": {
     "images": {
       "filters": [
         {
           "Name": "name",
-          "Values": ["postgres-sql-ami"]
+          "Values": ["bv/amzn2-ami-hvm-2.0.????????.?-x86_64-gp2*"]
+        },
+        {
+          "Name": "state",
+          "Values": ["available"]
         }
       ]
     },
-    "service_name": "test"
+    "service_name": "cert-kodak"
   }
 }
 
