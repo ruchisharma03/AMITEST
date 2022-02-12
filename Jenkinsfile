@@ -4,6 +4,7 @@ String cron_string = "0 0 */20 * *" // cron every 20th of the month
 
 pipeline {
   agent none
+  triggers{ cron(cron_string)}
   parameters {
 
     string(name: 'AWS_AGENT_LABEL', defaultValue: 'any', description: 'Label of the Agent which has python3 and aws profile configured')
@@ -16,26 +17,65 @@ pipeline {
     stage('check the ami version') {
       agent any
       steps {
-        sh script:"pip3 install boto3"
+          script {
+
+            def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
+
+            for (String jobStatus: result.split(',')) {
+
+              String[] eachjobStatus = jobStatus.split(':');
+
+              if (eachjobStatus.size() > 1) {
+
+                serviceAmiIdChanged[eachjobStatus[0]] = eachjobStatus[1];
+              }
+
+            }
+          }
+        }
+      }
+    }
+    // create the jobs dynamically
+    stage('build the job if the latest ami id is present') {
+
+      agent any
+
+      steps {
+
         script {
 
-          def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
-          println(result)
+          def jobConfig = readJSON file: "${env.WORKSPACE}/${params.JOBCONFIG_FILE_PATH}";
+          def serviceName = jobConfig.service_name;
+
+          if (!serviceAmiIdChanged["${serviceName}"]) {
+            
+            def jobList = jobConfig["${serviceName}"];
+
+            jobList.each {
+              eachJob -> 
+                build job: "${eachJob.job_name}", parameters: eachJob.parameters
+              
+            }
+
+          }
         }
-      }        
+      }
+
+    }
+
+  }
+
+  post {
+    always {
+      echo "====++++always++++===="
+    }
+    success {
+      echo "====++++only when successful++++===="
+      // jiraSendBuildInfo site: 'raghav-personal.atlassian.net'
+    }
+    failure {
+      echo "====++++only when failed++++===="
     }
   }
 
-}
-
-post {
-  always {
-    echo "====++++always++++===="
-  }
-  success {
-    echo "====++++only when successful++++===="
-  }
-  failure {
-    echo "====++++only when failed++++===="
-  }
 }
