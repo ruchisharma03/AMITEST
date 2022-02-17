@@ -16,7 +16,7 @@
         ]
       },
       "service_name": "cert-kodak",
-      "job_name":"kodak-user-test",
+      "job_name":"kodak/kodak-user-test",
       "regions": ["us-east-1"]
     }
   ]
