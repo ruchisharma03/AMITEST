@@ -54,7 +54,7 @@ pipeline {
             for (String eachJob: jobList) {
 
               if (serviceAmiIdChanged["${eachJob}"] == 'True') {
-
+              echo "hello world"
                 try {
                   stage("QA-${eachJob}") {
 
