@@ -48,7 +48,7 @@ pipeline {
         script {
 
           String[] jobList = params.JOB_NAMES.split(',');
-          println(jobList)
+          println(jobList[0])
           if (jobList.size() > 0) {
 
             for (String eachJob: jobList) {
