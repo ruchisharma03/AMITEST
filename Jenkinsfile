@@ -18,7 +18,7 @@ pipeline {
 
   stages {
     stage('check the ami version') {
-      agent any
+      agent {label "${AWS_AGENT_LABEL}"}
       steps {
           script {
 
@@ -41,7 +41,7 @@ pipeline {
     // create the jobs dynamically
     stage('build the QA services if the latest ami id is present') {
 
-      agent any
+      agent {label "${AGENT_LABEL}"}
 
       steps {
 
@@ -59,13 +59,13 @@ pipeline {
                   stage("QA-${eachJob}") {
 
                     build job: "${eachJob}"
-                    // emailext body: "${eachJob} succeeded", recipientProviders: [buildUser()], subject: "JOB ${eachJob} SUCCESS", to: 'ragaws1674@gmail.com'
+                    // emailext body: "${eachJob} succeeded", recipientProviders: [buildUser()], subject: "JOB ${eachJob} SUCCESS", to: ''
 
                   }
                 } catch (Exception e) {
 
                   echo "${eachJob} failed"
-                  // emailext body: "${eachJob} failed", recipientProviders: [buildUser()], subject: "JOB ${eachJob} FAILED", to: 'ragaws1674@gmail.com'
+                  // emailext body: "${eachJob} failed", recipientProviders: [buildUser()], subject: "JOB ${eachJob} FAILED", to: ''
                   throw e;
 
                 }
