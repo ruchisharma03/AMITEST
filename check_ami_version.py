@@ -7,73 +7,87 @@ from utils.utils import (get_latest_ami_version,
                          prepare_boto_clients
                          )
 
-                    
-CONFIG_FILE_PATH = getenv('AWS_SERVICE_CONFIG_FILE') # config file path
+
+CONFIG_FILE_PATH = getenv(
+    'AWS_SERVICE_CONFIG_FILE') or './config/config.json' # config file path
+
 # check the ami versions
 def check_ami_versions():
 
-    result = {}
+    status_map = {}
 
-    config, regions, services = get_config(CONFIG_FILE_PATH)
+    config = get_config(CONFIG_FILE_PATH)  # load the config
+    regions = config['regions']  # get the regions
+    # get the boto3 service client names , e.g. ec2
+    boto3_client_services = config['aws_boto_clients']
 
-    boto3_clients = prepare_boto_clients(services, regions)
+    services = config['services']
 
-    for each_region in regions:
+    boto3_clients = prepare_boto_clients(boto3_client_services, regions)
 
-        matched = False 
-        not_matched = True  
+    for each_service in services:
 
-        # boto3 service clients
-        ec2_client = boto3_clients[each_region]['EC2']
-        autoscaling_client = boto3_clients[each_region]['AUTOSCALING']
+        job_name = each_service['job_name']
+
+        matched = False
 
         # image filter
-        image_filters = config[each_region]['IMAGE_FILTER']
+        image_filters = each_service['images']['filters']
         # service name to filter launch config
-        service_name = config[each_region]['SERVICE_NAME']
+        service_name = each_service['service_name']
 
-        # first get the latest ami version
-        latest_ami_id = get_latest_ami_version(ec2_client, image_filters)
+        status_map[job_name] = {}
 
-        # launch config ami id
-        launch_config_ami_id = get_service_ami_version_from_lc(
-            autoscaling_client, service_name)
+        for each_region in each_service['regions']:
 
-        
-        # if ami id and launch confi ami id is not None 
-        if latest_ami_id and launch_config_ami_id:
-            # if ami id matches
-            if compare_ami_versions(latest_ami_id, launch_config_ami_id):
-                print(latest_ami_id,launch_config_ami_id)
-                matched = True  
-                not_matched = False 
+            status_map[job_name][each_region] = {}
+
+            # boto3 service clients
+            ec2_client = boto3_clients[each_region]['EC2']
+            autoscaling_client = boto3_clients[each_region]['AUTOSCALING']
+
+            # first get the latest ami version
+            latest_ami_id = get_latest_ami_version(ec2_client, image_filters)
+
+            # launch config ami id
+            launch_config_ami_id = get_service_ami_version_from_lc(
+                autoscaling_client, service_name)
+
+            # if ami id and launch config ami id is not None
+            if latest_ami_id and launch_config_ami_id:
+                # if ami id matches
+                if compare_ami_versions(latest_ami_id, launch_config_ami_id):
+                    matched = True
+                else:
+                    matched = False
             else:
-                matched = False   
-                not_matched = True  
-        else:
-            matched = False 
-            not_matched = False  
-        
-        # store the output
-        result[each_region] = {'REGION':  each_region,
-               'IMAGE_FILTER': image_filters,
-               'SERVICE_NAME': service_name,
-               'LATEST_AMI_ID': latest_ami_id,
-               'LAUNCH_CONFIG_AMI_ID': launch_config_ami_id,
-               'MATCHED': matched,
-               'NOT_MATCHED':not_matched
+                matched = False
 
-               }
-    return result
+            # store the output
+            status_map[job_name][each_region] = {
 
-# get the result in a compact manner
+                'LATEST_AMI_ID': latest_ami_id,
+                'LAUNCH_CONFIG_AMI_ID': launch_config_ami_id,
+                'MATCHED': matched
+
+            }
+
+        status_map[job_name]['AMI_CHANGED'] = not matched
+
+    return status_map
+
+
+# get the result in a compact manner for groovy
 def get_result():
+
     result = check_ami_versions()
-    output  = ''
-    for each_region in result:
-        if result[each_region]['SERVICE_NAME']:
-            output += result[each_region]['SERVICE_NAME'] +":" + str(result[each_region]['MATCHED'])
-            output +="," 
+    output = ''
+    for service_name, each_service in result.items():
+        output += service_name + \
+            ":" + str(each_service['AMI_CHANGED'])
+        output += ","
+
     return output
 
-print(check_ami_versions())
+
+print(get_result())
