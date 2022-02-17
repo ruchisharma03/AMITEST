@@ -1,5 +1,5 @@
 {
-  "regions": ["us-east-1","ap-south-1"],
+  "regions": ["us-east-1","eu-west-1"],
   "aws_boto_clients": ["ec2","autoscaling"],
   "services": [
     {
@@ -7,27 +7,17 @@
         "filters": [
           {
             "Name": "name",
-            "Values": ["postgres-sql-ami"]
-          }
-        ]
-      },
-      "service_name": "first",
-      "job_name":"first-1",
-      "regions": ["us-east-1","ap-south-1"]
-    },
-    {
-      "images": {
-        "filters": [
+            "Values": ["bv/amzn2-ami-hvm-2.0.????????.?-x86_64-gp2*"]
+          },
           {
-            "Name": "name",
-            "Values": ["postgres-sql-ami"]
+            "Name": "state",
+            "Values": ["available"]
           }
         ]
       },
-      "service_name": "second",
-      "job_name":"second-1",
-      "regions": ["ap-south-1"]
-
+      "service_name": "cert-kodak",
+      "job_name":"kodak-user-test",
+      "regions": ["us-east-1"]
     }
   ]
 }
