@@ -37,7 +37,6 @@ pipeline {
             }
           }
         }
-      }
     }
     // create the jobs dynamically
     stage('build the QA services if the latest ami id is present') {
@@ -95,4 +94,6 @@ pipeline {
     failure {
       echo "====++++only when failed++++===="
     }
- }
+  }
+
+}
