@@ -58,8 +58,6 @@ def get_service_ami_version_from_lc(client, service_name):
     if service_name:
         launch_configurations = client.describe_launch_configurations()
         if launch_configurations and len(launch_configurations['LaunchConfigurations']):
-            for i in launch_configurations['LaunchConfigurations']:
-                print(i['LaunchConfigurationName'],i['ImageId'])
             launch_configurations_filter = list(filter(lambda lc: lc['LaunchConfigurationName'].find(
                 service_name) != -1, launch_configurations['LaunchConfigurations']))
             if len(launch_configurations_filter):
