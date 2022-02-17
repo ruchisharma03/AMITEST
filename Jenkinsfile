@@ -4,13 +4,16 @@ String cron_string = "0 0 */20 * *" // cron every 20th of the month
 
 pipeline {
   agent none
-  triggers{ cron(cron_string)}
+  // triggers {
+  //   cron(cron_string)
+  // }
   parameters {
 
     string(name: 'AWS_AGENT_LABEL', defaultValue: 'any', description: 'Label of the Agent which has python3 and aws profile configured')
     string(name: 'AGENT_LABEL', defaultValue: 'any', description: 'Label of the Agent on which to execute the JOBS')
     string(name: 'JOBCONFIG_FILE_PATH', defaultValue: 'config/jobconfig.json', description: 'Path of the job config file')
     string(name: 'AWS_SERVICE_CONFIG_FILE', defaultValue: './config/config.json', description: 'Path of the aws service config file')
+    string(name: 'JOB_NAMES', description: 'List of jobs separated by commas in build sequence')
   }
 
   stages {
@@ -20,6 +23,7 @@ pipeline {
           script {
 
             def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
+            println(result);
 
             for (String jobStatus: result.split(',')) {
 
@@ -34,8 +38,9 @@ pipeline {
           }
         }
       }
+    }
     // create the jobs dynamically
-    stage('build the job if the latest ami id is present') {
+    stage('build the QA services if the latest ami id is present') {
 
       agent any
 
@@ -43,20 +48,35 @@ pipeline {
 
         script {
 
-          def jobConfig = readJSON file: "${env.WORKSPACE}/${params.JOBCONFIG_FILE_PATH}";
-          def serviceName = jobConfig.service_name;
+          String[] jobList = params.JOB_NAMES.split(',');
 
-          if (!serviceAmiIdChanged["${serviceName}"]) {
-            
-            def jobList = jobConfig["${serviceName}"];
+          if (jobList.size() > 0) {
 
-            jobList.each {
-              eachJob -> 
-                build job: "${eachJob.job_name}", parameters: eachJob.parameters
-              
+            for (String eachJob: jobList) {
+
+              if (serviceAmiIdChanged["${eachJob}"] == 'False') {
+
+                try {
+                  stage("QA-${eachJob}") {
+
+                    build job: "${eachJob}"
+                    // emailext body: "${eachJob} succeeded", recipientProviders: [buildUser()], subject: "JOB ${eachJob} SUCCESS", to: 'ragaws1674@gmail.com'
+
+                  }
+                } catch (Exception e) {
+
+                  echo "${eachJob} failed"
+                  // emailext body: "${eachJob} failed", recipientProviders: [buildUser()], subject: "JOB ${eachJob} FAILED", to: 'ragaws1674@gmail.com'
+                  throw e;
+
+                }
+
+              }
+
             }
 
           }
+
         }
       }
 
@@ -69,11 +89,11 @@ pipeline {
       echo "====++++always++++===="
     }
     success {
-      echo "====++++only when successful++++===="
-      
+      echo "====++++only when successful ${isQAJobSuccess}++++===="
     }
     failure {
       echo "====++++only when failed++++===="
     }
   }
+
 }
