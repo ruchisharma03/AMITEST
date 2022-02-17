@@ -49,10 +49,11 @@ pipeline {
 
           String[] jobList = params.JOB_NAMES.split(',');
           println(jobList[0])
+          println(serviceAmiIdChanged)
           if (jobList.size() > 0) {
 
             for (String eachJob: jobList) {
-              println(serviceAmiIdChanged)
+              
               if (serviceAmiIdChanged["${eachJob}"] == 'True') {
                 try {
                   stage("QA-${eachJob}") {
