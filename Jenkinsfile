@@ -52,7 +52,7 @@ pipeline {
           if (jobList.size() > 0) {
 
             for (String eachJob: jobList) {
-              println(serviceAmiIdChanged["${eachJob}"])
+              println(serviceAmiIdChanged)
               if (serviceAmiIdChanged["${eachJob}"] == 'True') {
                 try {
                   stage("QA-${eachJob}") {
