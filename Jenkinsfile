@@ -49,7 +49,7 @@ pipeline {
 
           String[] jobList = params.JOB_NAMES.split(',');
           println(jobList[0])
-          println(serviceAmiIdChanged)
+          println(serviceAmiIdChanged[jobList[0]])
           if (jobList.size() > 0) {
 
             for (String eachJob: jobList) {
