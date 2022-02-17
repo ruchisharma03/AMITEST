@@ -53,7 +53,7 @@ pipeline {
 
             for (String eachJob: jobList) {
 
-              if (serviceAmiIdChanged["${eachJob}"] == 'False') {
+              if (serviceAmiIdChanged["${eachJob}"] == 'True') {
 
                 try {
                   stage("QA-${eachJob}") {
@@ -88,7 +88,7 @@ pipeline {
       echo "====++++always++++===="
     }
     success {
-      echo "====++++only when successful ${isQAJobSuccess}++++===="
+      echo "====++++only when successful ++++===="
     }
     failure {
       echo "====++++only when failed++++===="
