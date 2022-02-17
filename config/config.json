@@ -18,6 +18,23 @@
       "service_name": "cert-kodak",
       "job_name":"kodak/kodak-user-test",
       "regions": ["us-east-1"]
+    },
+    {
+      "images": {
+        "filters": [
+          {
+            "Name": "name",
+            "Values": ["bv/amzn2-ami-hvm-2.0.????????.?-x86_64-gp2*"]
+          },
+          {
+            "Name": "state",
+            "Values": ["available"]
+          }
+        ]
+      },
+      "service_name": "qa-content-origin-registry",
+      "job_name":"conversations-submission/content-origin-registry/10-dev-code-build",
+      "regions": ["us-east-1"]
     }
   ]
 }
