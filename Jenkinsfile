@@ -58,7 +58,7 @@ pipeline {
                 try {
                   stage("QA-${eachJob}") {
 
-                    build job: "${eachJob}"
+                    build job: "${eachJob}", wait: true
                     // emailext body: "${eachJob} succeeded", recipientProviders: [buildUser()], subject: "JOB ${eachJob} SUCCESS", to: ''
 
                   }
