@@ -28,6 +28,7 @@ with open('jira/jira.config.yaml') as fp:
             {
                 "key": config['PROJECT_KEY'],
             },
+            "customfield_11699": [{"value": "Conversations"},],
             "summary": config['SUMMARY'],
             "description": config["DESCRIPTION"],
             "issuetype": {
