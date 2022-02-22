@@ -87,6 +87,7 @@ pipeline {
       echo "====++++only when successful ++++===="
         node("${AWS_AGENT_LABEL}")
         {
+          sh "ls"
           sh(returnStdout: true, script: 'python3 jira/create_issue.py')
         } 
       }
