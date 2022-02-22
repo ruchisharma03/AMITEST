@@ -12,6 +12,7 @@ pipeline {
     string(name: 'AWS_AGENT_LABEL', defaultValue: 'any', description: 'Label of the Agent which has python3 and aws profile configured')
     string(name: 'AWS_SERVICE_CONFIG_FILE', defaultValue: './config/config.json', description: 'Path of the aws service config file')
     string(name: 'JOB_NAMES', description: 'List of jobs separated by commas in build sequence (job names for the service).')
+    string(name: 'API_TOKEN', description: 'Token for Jira tickets).')
   }
 
   stages {
