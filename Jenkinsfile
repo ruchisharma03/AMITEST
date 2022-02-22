@@ -88,6 +88,7 @@ pipeline {
         node("${AWS_AGENT_LABEL}")
         { 
           git branch: 'main', changelog: false, poll: false, url: 'git@github.com:ruchisharma03/AMITEST.git'
+          sh "pip3 install -r requirements.txt"
           sh "ls"
           sh(returnStdout: true, script: 'python3 jira/create_issue.py')
         } 
