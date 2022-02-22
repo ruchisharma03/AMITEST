@@ -10,10 +10,8 @@ pipeline {
   parameters {
 
     string(name: 'AWS_AGENT_LABEL', defaultValue: 'any', description: 'Label of the Agent which has python3 and aws profile configured')
-    string(name: 'AGENT_LABEL', defaultValue: 'any', description: 'Label of the Agent on which to execute the JOBS')
-    string(name: 'JOBCONFIG_FILE_PATH', defaultValue: 'config/jobconfig.json', description: 'Path of the job config file')
     string(name: 'AWS_SERVICE_CONFIG_FILE', defaultValue: './config/config.json', description: 'Path of the aws service config file')
-    string(name: 'JOB_NAMES', description: 'List of jobs separated by commas in build sequence')
+    string(name: 'JOB_NAMES', description: 'List of jobs separated by commas in build sequence (job names for the service).')
   }
 
   stages {
@@ -40,8 +38,6 @@ pipeline {
     }
     // create the jobs dynamically
     stage('build the QA services if the latest ami id is present') {
-
-      agent {label "${AGENT_LABEL}"}
 
       steps {
 
