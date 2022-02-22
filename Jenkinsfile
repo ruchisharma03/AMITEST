@@ -85,9 +85,11 @@ pipeline {
     }
     success {
       echo "====++++only when successful ++++===="
-      node {
-        label "${AWS_AGENT_LABEL}"
-        sh(returnStdout: true, script: 'python3 jira/create_issue.py')
+      agent {
+        node {
+          label "${AWS_AGENT_LABEL}"
+          sh(returnStdout: true, script: 'python3 jira/create_issue.py')
+        }  
       }
     }
     failure {
