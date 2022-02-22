@@ -1,7 +1,10 @@
 from requests import post
 from json import dumps, loads
+from os import getenv
 from yaml import safe_load
 from base64 import b64encode
+
+api_token = getenv('API_TOKEN')
 
 with open('jira/jira.config.yaml') as fp:
 
@@ -11,7 +14,7 @@ with open('jira/jira.config.yaml') as fp:
 
     username = config['USERNAME']
 
-    api_token = config['API_TOKEN']
+    #api_token = config['API_TOKEN']
 
     auth_header = b64encode(str(
         username+":"+api_token).encode('ascii')).decode("ascii")
