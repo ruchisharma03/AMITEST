@@ -1,37 +1,8 @@
 ---
-API_TOKEN: 
-USERNAME: 
-DOMAIN: 
-PROJECT_KEY: 
-DESCRIPTION: |
-  *Purpose* :
-  *Status* :
-  *Runbook*: [ReleaseChecklist|https://github.com/bazaarvoice/agrippa-submission-service/blob/master/doc/ops/submissionReleaseChecklist.md]
-  || SUBMISSION ||
-  ||QA (with proxy qa-agrippa-proxy.nexus.bazaarvoice.com:1113)||
-  |[https://submission-qa-origin.us-east-1.qa.bazaarvoice.com/HOSTINFO.txt]|
-  |(!)|
-  |(!) UI regression for Submission |
-  |(!) API submissions |
-  |(!) Dreamcatcher QA smoke tests |
-  |(!) Dreamcatcher QA regression tests |
-  ||PROD - CANDIDATE (with proxy prod-agrippa-proxy.nexus.bazaarvoice.com:1116)||
-  |[https://submission-candidate-origin.us-east-1.prod.bazaarvoice.com/HOSTINFO.txt]|
-  |(!)|
-  |(!) UI regression for Submission |
-  ||STG (with proxy prod-agrippa-proxy.nexus.bazaarvoice.com:1119) use /bvstaging in url)||
-  | eu-west - [https://submission-stg-origin.eu-west-1.prod.bazaarvoice.com/bvstaging/HOSTINFO.txt]|
-  |(!)|
-  |(!) UI regression for Submission |
-  |(!) API submissions |
-  ||LIVE PRODUCTION||
-  |US - [https://submission-prod-origin.us-east-1.prod.bazaarvoice.com/HOSTINFO.txt]|
-  |(!)|
-  |(!) UI regression for Submission |
-  |(!) API Submission smoke tests in PROD |
-  |EU - [https://submission-prod-origin.eu-west-1.prod.bazaarvoice.com/HOSTINFO.txt]|
-  |(!)|
-  |(!) UI regression for Submission - testcustomer-c7 review submit to eu-west-1 | 
-  |(!) API Submission smoke tests in PROD |"
+API_TOKEN: f7TVSYoYOWc3AeeXlwio1E3F
+USERNAME: ruchi.sharma@bazaarvoice.com
+DOMAIN: bazaarvoice
+PROJECT_KEY: PD
+DESCRIPTION: "Create UAT ticket"
 ISSUETYPE: Task
-SUMMARY: " "
+SUMMARY: "Create tickets for UAT and prod deployments"
