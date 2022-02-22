@@ -89,6 +89,12 @@ pipeline {
     }
     success {
       echo "====++++only when successful ++++===="
+      script{
+
+        def jiraResult = sh(returnStdout: true, script: 'python3 jira/create_issue.py')
+        println(jiraResult)
+
+      }
     }
     failure {
       echo "====++++only when failed++++===="
