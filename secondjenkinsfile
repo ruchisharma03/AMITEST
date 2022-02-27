@@ -22,7 +22,9 @@ pipeline {
             usernameVariable: 'JIRA_USERNAME',
             passwordVariable: 'JIRA_API_TOKEN',
         ]]) {
-            
+           
+          sh 'pip3 install -r requirements.txt'
+           
           script {
             
             status = sh(returnStdout: true, script: 'python3 jira_scripts/check_status_field.py')
