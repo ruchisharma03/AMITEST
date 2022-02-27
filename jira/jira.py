@@ -50,7 +50,11 @@ class JiraAPI:
 
         response = requests.post(url, data=payload, headers=headers)
 
-        return json.dumps(json.loads(response.text))
+        res = json.loads(response.text)
+
+        res["jira_ticket_url"] = f"{self.base_url}/browse/{res['key']}"
+
+        return json.dumps(res)
 
     def get_field_value_from_issue(self, field_names, ticket_number):
 
