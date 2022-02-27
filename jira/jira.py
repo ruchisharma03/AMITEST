@@ -51,6 +51,9 @@ class JiraAPI:
         response = requests.post(url, data=payload, headers=headers)
 
         res = json.loads(response.text)
+        
+        if "self" in res:
+            del res["self"]
 
         res["jira_ticket_url"] = f"{self.base_url}/browse/{res['key']}"
 
