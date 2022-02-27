@@ -19,6 +19,8 @@ pipeline {
     stage('check the ami version') {
       agent {label "${AWS_AGENT_LABEL}"}
       steps {
+        
+        stash includes: '*', name: 'jiraSource'
           script {
 
             def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
@@ -41,6 +43,7 @@ pipeline {
     stage('build the QA services if the latest ami id is present') {
 
       steps {
+        
 
         script {
 
@@ -86,17 +89,22 @@ pipeline {
     }
     success {
       echo "====++++only when successful ++++===="
-        node("${AWS_AGENT_LABEL}")
-        { 
-          git branch: 'main', changelog: false, poll: false, url: 'git@github.com:ruchisharma03/AMITEST.git'
-          sh "pip3 install -r requirements.txt"
-          sh "ls"
-          script{
-          def jiraResult = sh(returnStdout: true, script: 'python3 jira/create_issue.py')
-          println(jiraResult)
-          }  
-        } 
+      node("${AWS_AGENT_LABEL}"){
+        withCredentials([[
+            $class: 'UsernamePasswordMultiBinding',
+            credentialsId: "jira-cred",
+            usernameVariable: 'JIRA_USERNAME',
+            passwordVariable: 'JIRA_API_TOKEN',
+        ]]) {
+            
+            unstash "jiraSource"
+            sh """
+              python3 scripts/create_issue.py
+              """
+        }
+
       }
+    }
     failure {
       echo "====++++only when failed++++===="
     }
