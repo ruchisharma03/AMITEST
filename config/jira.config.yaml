@@ -1,0 +1,8 @@
+---
+domain: bazaarvoice
+projectKey: PD
+issueType: Task
+fields:
+  description: "test latest from jenkins"
+  summary: "Test"
+  customfield_11699: [{"value": "Conversations"},]
