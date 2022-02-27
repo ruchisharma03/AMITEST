@@ -25,7 +25,7 @@ pipeline {
             
           script {
             
-            status = sh(returnStdout: true, script: 'python3 scripts/check_status_field.py')
+            status = sh(returnStdout: true, script: 'python3 jira_scripts/check_status_field.py')
             status = status.replaceAll("[\n\r]", "");
             println(status);
           
