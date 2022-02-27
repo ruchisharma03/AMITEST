@@ -14,7 +14,7 @@ pipeline {
 
   stages {
     stage('check the jira field status') {
-      agent any
+      agent {label 'java/1.8-docker-ecr && environment/qa && account/bv-nexus-qa'}
       steps {
        withCredentials([[
             $class: 'UsernamePasswordMultiBinding',
