@@ -20,7 +20,7 @@ pipeline {
       agent {label "${AWS_AGENT_LABEL}"}
       steps {
         
-        stash includes: '*', name: 'jiraSource'
+        stash includes: '**', name: 'jiraSource'
           script {
 
             def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
