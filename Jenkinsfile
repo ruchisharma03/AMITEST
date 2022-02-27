@@ -99,6 +99,7 @@ pipeline {
             
             unstash "jiraSource"
             sh """
+              ls -l
               python3 scripts/create_issue.py
               """
         }
