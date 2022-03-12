@@ -16,7 +16,7 @@ pipeline {
   stages {
     //  check for the ami version and if the ami is different , then go to the next stage.
     stage('check the ami version') {
-      agent { label: ${AWS_AGENT_LABEL} }
+      agent {label "${AWS_AGENT_LABEL}"}
       steps {
 
         script {
