@@ -61,7 +61,7 @@ def get_service_ami_version_from_lc(client, service_name):
     '''
     if service_name:
         
-        launch_configuration_dict = client.describe_launch_configurations(MaxRecords=1)
+        launch_configuration_dict = client.describe_launch_configurations()
         next_token = launch_configuration_dict.get('NextToken', None)
         while next_token is not None:
             launch_configurations = client.describe_launch_configurations(
