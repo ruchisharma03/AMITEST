@@ -1,5 +1,5 @@
 //  store 'servicename': 'latest ami is present or not'
-def serviceAmiIdChanged = [: ]
+def isJobRunning = true;
 String cron_string = "0 0 */20 * *" // cron every 20th of the month
 
 pipeline {
@@ -15,43 +15,36 @@ pipeline {
 
   stages {
     //  check for the ami version and if the ami is different , then go to the next stage.
-    stage('check the ami version') {
-      agent {label "${AWS_AGENT_LABEL}"}
-      steps {
-
-        script {
-
-          def result = sh(returnStdout: true, script: 'python3 check_ami_version.py')
-          println(result);
-
-          for (String jobStatus: result.split(',')) {
-
-            String[] eachjobStatus = jobStatus.split(':');
-
-            if (eachjobStatus.size() > 1) {
-
-              serviceAmiIdChanged[eachjobStatus[0]] = eachjobStatus[1];
-            }
-
-          }
-        }
-      }
-    }
+   
     // create the jobs dynamically
     stage('build the QA-service-01') {
-    agent {label "${AWS_AGENT_LABEL}"}
-      steps {
-        sh "aws configure list"
 
-        
+      steps {
+
+
+        build job: "kodak/kodak-user-test"
+       
+        script{
+          isJobRunning = false;
+        }
 
       }
     }
 
     stage('build the QA-service-02') {
       steps {
-        echo "hello world"
-        
+
+        script{
+
+           while(!isJobRunning){
+
+              isJobRunning = true;
+              build job: "conversations-submission/content-origin-registry/10-dev-code-build"
+
+           }
+            isJobRunning = false;
+        }
+       
 
       }
     }
