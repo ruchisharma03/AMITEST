@@ -71,7 +71,6 @@ def check_ami_versions():
                 'MATCHED': matched
 
             }
-        print(status_map)
         if matched is not  None:
             status_map[job_name]['AMI_CHANGED'] = not matched
         else:
