@@ -41,7 +41,7 @@ pipeline {
     stage('build the QA-service-01') {
 
       steps {
-        echo "hello world"
+        sh "aws configure list"
 
         
 
