@@ -16,7 +16,7 @@ pipeline {
   stages {
     //  check for the ami version and if the ami is different , then go to the next stage.
     stage('check the ami version') {
-      agent any
+      agent { label: ${AWS_AGENT_LABEL} }
       steps {
 
         script {
@@ -42,7 +42,7 @@ pipeline {
 
       steps {
 
-        build job: "first"
+        build job: "kodak/kodak-user-test"
 
       }
     }
@@ -50,7 +50,7 @@ pipeline {
     stage('build the QA-service-02') {
       steps {
 
-        build job: "second"
+        build job: "conversations-submission/content-origin-registry/10-dev-code-build"
 
       }
     }
