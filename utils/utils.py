@@ -37,7 +37,6 @@ def get_latest_ami_version(client, filters):
                 each_image['CreationDate'] = datetime.strptime(each_image['CreationDate'], "%Y-%m-%dT%H:%M:%S.%fZ")
             images['Images'].sort(
                 key=lambda image: image['CreationDate'], reverse=True)
-            print(  images['Images'][0]['ImageId'])
             return images['Images'][0]['ImageId']
     return None
 
