@@ -24,8 +24,8 @@ pipeline {
         build job: "kodak/kodak-user-test"
        
       }
-    }
-    post{
+    
+    post {
         always{
             echo "====++++always++++===="
         }
