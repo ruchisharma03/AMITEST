@@ -6,13 +6,16 @@ from datetime import datetime
 def prepare_boto_clients(services, regions):
     '''
     @purpose: prepare the boto3 clients per region and service
+
     @input: services: str[], list of services
             regions: str[], list of regions
+
     @returns: {
         region: {
             'EC2': Boto3.Client('ec2',region)
         }
     }: str 
+
     '''
     boto3_clients = {}  # list to store the boto3 clients for different services and regions
     for each_region in regions:
@@ -27,9 +30,12 @@ def prepare_boto_clients(services, regions):
 def get_latest_ami_version(client, filters):
     '''
     @purpose: get the latest ami from a region based on filters
+
     @input: client: boto3.Client
             filters: [{Name: str ,Values:[]}]
+
     @returns: ImageId: str 
+
     '''
     if filters:
         images = client.describe_images(Filters=filters)
@@ -47,8 +53,10 @@ def get_latest_ami_version(client, filters):
 def get_service_ami_version_from_lc(client, service_name):
     '''
     @purpose: get the service ami from a launch configuration based on name
+
     @input: client: boto3.Client
             service_name: str
+
     @returns: ImageId: str 
     '''
     if service_name:
@@ -71,8 +79,10 @@ def get_service_ami_version_from_lc(client, service_name):
 def compare_ami_versions(this_ami, that_ami):
     '''
     @purpose: compare the amis
+
     @input: this_ami: boto3.Client
             that_ami: str
+
     @returns: boolean 
     '''
-    return this_ami == 
+    return this_ami == that_ami
