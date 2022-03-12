@@ -42,7 +42,7 @@ pipeline {
 
       steps {
 
-        build job: "kodak/kodak-user-test"
+        
 
       }
     }
@@ -50,7 +50,7 @@ pipeline {
     stage('build the QA-service-02') {
       steps {
 
-        build job: "conversations-submission/content-origin-registry/10-dev-code-build"
+        
 
       }
     }
