@@ -39,7 +39,7 @@ pipeline {
     }
     // create the jobs dynamically
     stage('build the QA-service-01') {
-
+    agent {label "${AWS_AGENT_LABEL}"}
       steps {
         sh "aws configure list"
 
