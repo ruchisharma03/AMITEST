@@ -9,7 +9,7 @@ from utils.utils import (get_latest_ami_version,
 
 
 CONFIG_FILE_PATH = getenv(
-    'AWS_SERVICE_CONFIG_FILE')  # config file path
+    'AWS_SERVICE_CONFIG_FILE') or './config/config.json' # config file path
 
 # check the ami versions
 def check_ami_versions():
@@ -61,7 +61,7 @@ def check_ami_versions():
                 else:
                     matched = False
             else:
-                matched = False
+                matched = None
 
             # store the output
             status_map[job_name][each_region] = {
@@ -72,7 +72,10 @@ def check_ami_versions():
 
             }
 
-        status_map[job_name]['AMI_CHANGED'] = not matched
+        if matched is not  None:
+            status_map[job_name]['AMI_CHANGED'] = not matched
+        else:
+            status_map[job_name]['AMI_CHANGED'] = False 
 
     return status_map
 
