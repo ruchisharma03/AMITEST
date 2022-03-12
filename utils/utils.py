@@ -2,6 +2,7 @@
 import boto3
 from datetime import datetime
 
+
 def prepare_boto_clients(services, regions):
     '''
     @purpose: prepare the boto3 clients per region and service
@@ -34,9 +35,11 @@ def get_latest_ami_version(client, filters):
         images = client.describe_images(Filters=filters)
         if images and len(images['Images']):
             for each_image in images['Images']:
-                each_image['CreationDate'] = datetime.strptime(each_image['CreationDate'], "%Y-%m-%dT%H:%M:%S.%fZ")
+                each_image['CreationDate'] = datetime.strptime(
+                    each_image['CreationDate'], "%Y-%m-%dT%H:%M:%S.%fZ")
             images['Images'].sort(
                 key=lambda image: image['CreationDate'], reverse=True)
+            print(images['Images'][0]['ImageId'])
             return images['Images'][0]['ImageId']
     return None
 
@@ -49,11 +52,17 @@ def get_service_ami_version_from_lc(client, service_name):
     @returns: ImageId: str 
     '''
     if service_name:
-        launch_configurations = client.describe_launch_configurations()
-        print(launch_configurations)
-        if launch_configurations and len(launch_configurations['LaunchConfigurations']):
+        
+        launch_configuration_dict = client.describe_launch_configurations(MaxRecords=1)
+        next_token = launch_configuration_dict.get('NextToken', None)
+        while next_token is not None:
+            launch_configurations = client.describe_launch_configurations(
+                NextToken=next_token)
+            next_token = launch_configurations.get('NextToken', None)
+            launch_configuration_dict['LaunchConfigurations'].extend(launch_configurations['LaunchConfigurations'])
+        if launch_configuration_dict and len(launch_configuration_dict['LaunchConfigurations']):
             filtered_launch_configurations = list(filter(lambda lc: lc['LaunchConfigurationName'].find(
-                service_name) != -1, launch_configurations['LaunchConfigurations']))
+                service_name) != -1, launch_configuration_dict['LaunchConfigurations']))
             if len(filtered_launch_configurations):
                 return filtered_launch_configurations[0]['ImageId']
     return None
@@ -66,4 +75,4 @@ def compare_ami_versions(this_ami, that_ami):
             that_ami: str
     @returns: boolean 
     '''
-    return this_ami == that_ami
+    return this_ami == 
