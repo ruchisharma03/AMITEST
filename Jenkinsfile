@@ -21,7 +21,7 @@ pipeline {
       steps {
 
 
-        build job: "First Job"
+        build job: "kodak/kodak-user-test"
        
       }
     }
@@ -32,7 +32,7 @@ pipeline {
         success{
             echo "====++++only when successful++++===="
              node("${AWS_AGENT_LABEL}"){
-              build job: "Second Job"
+              build job: "conversations-submission/content-origin-registry/10-dev-code-build"
 
              }
         }
