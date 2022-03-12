@@ -1,5 +1,4 @@
-//  store 'servicename': 'latest ami is present or not'
-def isJobRunning = true;
+
 String cron_string = "0 0 */20 * *" // cron every 20th of the month
 
 pipeline {
@@ -22,31 +21,24 @@ pipeline {
       steps {
 
 
-        build job: "kodak/kodak-user-test"
+        build job: "First Job"
        
-        script{
-          isJobRunning = false;
-        }
-
       }
     }
-
-    stage('build the QA-service-02') {
-      steps {
-
-        script{
-
-           while(!isJobRunning){
-
-              isJobRunning = true;
-              build job: "conversations-submission/content-origin-registry/10-dev-code-build"
-
-           }
-            isJobRunning = false;
+    post{
+        always{
+            echo "====++++always++++===="
         }
-       
+        success{
+            echo "====++++only when successful++++===="
+             node("${AWS_AGENT_LABEL}"){
+              build job: "Second Job"
 
-      }
+             }
+        }
+        failure{
+            echo "====++++only when failed++++===="
+        }
     }
   }
   post {
