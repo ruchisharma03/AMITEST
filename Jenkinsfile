@@ -41,6 +41,7 @@ pipeline {
     stage('build the QA-service-01') {
 
       steps {
+        echo "hello world"
 
         
 
@@ -49,7 +50,7 @@ pipeline {
 
     stage('build the QA-service-02') {
       steps {
-
+        echo "hello world"
         
 
       }
